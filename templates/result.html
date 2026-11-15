@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block crumb %}{{ m.title }} — result{% endblock %}
+{% block content %}
+<div class="card narrow">
+  <div class="verdict {{ 'ok' if result.score >= 70 else 'bad' }}">Mission complete</div>
+  <h2 class="score-big">{{ result.score }}<span>/100</span></h2>
+  <div class="grid stats small">
+    <div class="stat"><span class="label">XP earned</span><strong>+{{ result.xp }}</strong></div>
+    <div class="stat"><span class="label">Accuracy</span><strong>{{ result.accuracy }}%</strong></div>
+    <div class="stat"><span class="label">Wrong answers</span><strong>{{ state.wrong }}</strong></div>
+    <div class="stat"><span class="label">Hints used</span><strong>{{ state.hints }}</strong></div>
+    <div class="stat"><span class="label">Time</span><strong>{{ elapsed }}s</strong></div>
+    <div class="stat"><span class="label">Time bonus</span><strong>+{{ result.time_bonus }}</strong></div>
+  </div>
+  <h3>Debrief</h3>
+  <p>{{ m.explanation }}</p>
+  <h3>Real-world relevance</h3>
+  <p class="muted">{{ m.real_world }}</p>
+  <div class="actions">
+    <a class="btn primary" href="/mission/{{ m.id }}">Replay</a>
+    <a class="btn" href="/missions">More missions</a>
+    <a class="btn ghost" href="/">Dashboard</a>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block crumb %}{{ m.title }}{% endblock %}
+{% block content %}
+<div class="mission-head">
+  <div>
+    <span class="badge {{ 'red' if m.track == 'red' else ('blue' if m.track == 'blue' else 'purple') }}">
+      {{ 'RED TEAM' if m.track == 'red' else ('SOC' if m.track == 'blue' else 'RED vs SOC') }}
+    </span>
+    <h2>{{ m.title }}</h2>
+    <p class="muted">{{ m.category }} · difficulty {{ m.difficulty }} · {{ m.minutes }} min</p>
+  </div>
+  <div class="stage-count">Stage {{ idx + 1 }} / {{ m.stages|length }}</div>
+</div>
+
+<div class="grid two">
+  <div class="card">
+    <h3>Scenario</h3>
+    <p>{{ m.story }}</p>
+    <h3>Objectives</h3>
+    <ul>{% for o in m.objectives %}<li>{{ o }}</li>{% endfor %}</ul>
+    <h3>Tools</h3>
+    <div class="tools">{% for t in m.tools %}<span class="tag">{{ t }}</span>{% endfor %}</div>
+  </div>
+
+  <div class="card">
+    <h3>Stage {{ idx + 1 }}</h3>
+    <p class="prompt">{{ stage.prompt }}</p>
+    {% if stage.data %}<pre class="data">{{ stage.data }}</pre>{% endif %}
+
+    <form method="post" action="/mission/{{ m.id }}/submit">
+      <input type="hidden" name="stage" value="{{ idx }}">
+      <input type="hidden" name="score" value="{{ state.score }}">
+      <input type="hidden" name="wrong" value="{{ state.wrong }}">
+      <input type="hidden" name="hints" value="{{ state.hints }}">
+      <input type="hidden" name="started" value="{{ state.started }}">
+
+      {% if stage.type == 'analyze' %}
+        <div class="options">
+        {% for opt in stage.options %}
+          <label class="option"><input type="radio" name="answer" value="{{ loop.index0 }}" required> <span>{{ opt }}</span></label>
+        {% endfor %}
+        </div>
+      {% elif stage.type == 'decision' %}
+        <p class="muted">Select all that apply.</p>
+        <div class="options">
+        {% for opt in stage.options %}
+          <label class="option"><input type="checkbox" name="answer" value="{{ loop.index0 }}"> <span>{{ opt }}</span></label>
+        {% endfor %}
+        </div>
+      {% elif stage.type == 'terminal' %}
+        <input class="command" type="text" name="answer" placeholder="type the command..." autocomplete="off" required>
+      {% elif stage.type == 'report' %}
+        <label class="field">Severity
+          <select name="severity">
+            {% for s in stage.severity_options %}<option value="{{ s }}">{{ s }}</option>{% endfor %}
+          </select>
+        </label>
+        <label class="field">Remediation
+          <select name="remediation">
+            {% for r in stage.remediation_options %}<option value="{{ loop.index0 }}">{{ r }}</option>{% endfor %}
+          </select>
+        </label>
+      {% endif %}
+
+      <button class="btn primary" type="submit">Submit</button>
+    </form>
+
+    <div class="hints">
+      <div class="hint-head">Hints used: {{ state.hints }} / 4</div>
+      {% for h in hint_list %}<p class="hint">💡 {{ h }}</p>{% endfor %}
+      {% if state.hints < 4 %}
+      <form method="post" action="/mission/{{ m.id }}/hint">
+        <input type="hidden" name="stage" value="{{ idx }}">
+        <input type="hidden" name="score" value="{{ state.score }}">
+        <input type="hidden" name="wrong" value="{{ state.wrong }}">
+        <input type="hidden" name="hints" value="{{ state.hints }}">
+        <input type="hidden" name="started" value="{{ state.started }}">
+        <button class="btn ghost" type="submit">Reveal hint (−6 pts)</button>
+      </form>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

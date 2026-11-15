@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block crumb %}Dashboard{% endblock %}
+{% block content %}
+<div class="grid stats">
+  <div class="card stat">
+    <span class="label">Rank</span>
+    <strong>{{ rank }}</strong>
+    {% if next_rank %}<small>{{ next_threshold - player.xp }} XP to {{ next_rank }}</small>{% endif %}
+  </div>
+  <div class="card stat">
+    <span class="label">Total XP</span>
+    <strong>{{ player.xp }}</strong>
+  </div>
+  <div class="card stat">
+    <span class="label">Missions completed</span>
+    <strong>{{ completed }} / {{ missions|length }}</strong>
+  </div>
+  <div class="card stat">
+    <span class="label">Average score</span>
+    <strong>{{ average }}</strong>
+  </div>
+</div>
+
+<div class="grid two">
+  <div class="card">
+    <h2>Track progress</h2>
+    {% for key, label, cls in [('red','Red Team','red'), ('blue','SOC Operations','blue')] %}
+      {% set s = stats[key] %}
+      <div class="progress-row">
+        <div class="progress-head"><span>{{ label }}</span><span>{{ s.done }}/{{ s.total }}</span></div>
+        <div class="bar {{ cls }}"><div style="width: {{ (s.done * 100 / s.total) if s.total else 0 }}%"></div></div>
+      </div>
+    {% endfor %}
+    <div class="progress-row">
+      <div class="progress-head"><span>Red vs SOC</span><span>{{ stats['both'].done }}/{{ stats['both'].total }}</span></div>
+      <div class="bar purple"><div style="width: {{ (stats['both'].done * 100 / stats['both'].total) if stats['both'].total else 0 }}%"></div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Daily mission</h2>
+    <p class="muted">{{ daily.category }} · difficulty {{ daily.difficulty }}</p>
+    <h3>{{ daily.title }}</h3>
+    <p>{{ daily.story }}</p>
+    <a class="btn primary" href="/mission/{{ daily.id }}">Start mission</a>
+  </div>
+</div>
+
+<div class="grid two">
+  <div class="card">
+    <h2>Recent activity</h2>
+    {% if activity %}
+    <table>
+      <tr><th>Mission</th><th>Score</th><th>XP</th><th>When</th></tr>
+      {% for a in activity %}
+      <tr>
+        <td>{{ a.mission_id }}</td>
+        <td>{{ a.score }}</td>
+        <td>+{{ a.xp }}</td>
+        <td class="muted">{{ a.created[:16].replace('T',' ') }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% else %}
+      <p class="muted">No missions completed yet. Start with Red Team or SOC.</p>
+    {% endif %}
+  </div>
+
+  <div class="card">
+    <h2>Achievements</h2>
+    <ul class="achievements">
+      {% for name, desc, unlocked in achievements %}
+      <li class="{{ 'unlocked' if unlocked else 'locked' }}">
+        <span class="dot"></span>
+        <div><strong>{{ name }}</strong><small>{{ desc }}</small></div>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+{% endblock %}

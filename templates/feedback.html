@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block crumb %}{{ m.title }} — feedback{% endblock %}
+{% block content %}
+<div class="card narrow">
+  <div class="verdict {{ 'ok' if ok else 'bad' }}">{{ '✓ Correct' if ok else '✗ Not quite' }}</div>
+  <h3>Why</h3>
+  <p>{{ explain }}</p>
+  <form method="post" action="/mission/{{ m.id }}/continue">
+    <input type="hidden" name="next" value="{{ next_idx }}">
+    <input type="hidden" name="score" value="{{ state.score }}">
+    <input type="hidden" name="wrong" value="{{ state.wrong }}">
+    <input type="hidden" name="hints" value="{{ state.hints }}">
+    <input type="hidden" name="started" value="{{ state.started }}">
+    <button class="btn primary" type="submit">Continue to stage {{ next_idx + 1 }}</button>
+  </form>
+</div>
+{% endblock %}

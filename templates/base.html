@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Crack or Track{% endblock %}</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="logo">◈</div>
+      <div>
+        <h1>Crack or Track</h1>
+        <small>by Abo Sara</small>
+      </div>
+    </div>
+    <nav>
+      <a href="/" class="{{ 'active' if active == 'dashboard' else '' }}">Dashboard</a>
+      <a href="/missions?track=red" class="{{ 'active' if active == 'red' else '' }}">Red Team</a>
+      <a href="/missions?track=blue" class="{{ 'active' if active == 'blue' else '' }}">SOC</a>
+      <a href="/missions" class="{{ 'active' if active == 'all' else '' }}">All missions</a>
+    </nav>
+    <div class="player-mini">
+      <span class="label">Rank</span>
+      <strong>{{ rank }}</strong>
+      <span class="label">{{ player.xp }} XP</span>
+    </div>
+  </aside>
+  <main>
+    <header class="topbar">
+      <div class="crumb">{% block crumb %}Operations console{% endblock %}</div>
+      <div class="badges">
+        <span class="badge red">RED</span>
+        <span class="badge blue">SOC</span>
+      </div>
+    </header>
+    <section class="content">
+      {% block content %}{% endblock %}
+    </section>
+  </main>
+</div>
+</body>
+</html>

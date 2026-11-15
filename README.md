@@ -1,131 +1,105 @@
-# BREACH — terminal hacking simulator
+# Crack or Track by Abo Sara
 
-A small, dependency-free Python game about **authorized** red-team work:
-scan a scope, find credentials, pivot through hosts, and grab the flag
-before the detection meter hits 100%.
+A cybersecurity training game with two tracks: **Red Team operations** and
+**SOC operations**. Learn how attackers find weaknesses, and how defenders
+detect and respond — in the same product.
 
-Playable in any terminal. Pure standard library. Runs offline.
+All scenarios use fictional hosts, logs, and credentials. Nothing in the game
+touches a real network.
 
-## Why this exists
+## Features
 
-Most "hacking games" are quizzes. This one models the actual loop:
-**recon → access → evidence → objective**, with a risk cost attached to
-every noisy action. The detection meter is the point: speed matters, but
-carelessness ends the engagement.
+- **Two tracks** — Red Team (recon, web, API) and SOC (phishing, SIEM, malware)
+- **Red vs SOC crossover mission** — see the same intrusion from both sides
+- **Interactive stages** — analyze real-looking output, type commands, make
+  decisions, and write findings; no multiple-choice-only quizzes
+- **Progressive hints** — four levels per mission, at a score cost
+- **XP, ranks, achievements** — progress saved in SQLite
+- **Scoring that rewards thinking** — accuracy, methodology (wrong answers),
+  efficiency (hints), and time
+- **Dark operations console UI** — dashboard, track progress, recent activity
 
 ## Quick start
 
 ```bash
-python3 breach.py        # Mission 1
-python3 breach.py 2      # Mission 2
-python3 breach.py 3      # Mission 3
+cd breach
+python3 -m venv .venv
+./.venv/bin/pip install fastapi "uvicorn[standard]" jinja2 python-multipart
+./run.sh
 ```
 
-No dependencies. Python 3.10+.
+Open **http://127.0.0.1:8800**.
 
-## Commands
+## Missions
 
-| Command | Effect | Heat |
-|---|---|---|
-| `scan` | list hosts in scope | +5 |
-| `connect <ip>` | open a session | +2 |
-| `login <ip> <user> <pass>` | authenticate | +2 (+10 on failure) |
-| `exploit <ip>` | use a known weakness | +20 |
-| `ls` | list files | +1 |
-| `cat <file>` | read a file | +2 |
-| `flag` | submit the objective | +15 |
-| `heat` | show detection level | 0 |
-| `exit` | quit | 0 |
+| ID | Track | Title | Category |
+|---|---|---|---|
+| r1 | Red | Silent Recon | Reconnaissance |
+| r2 | Red | Broken Login | Web application |
+| r3 | Red | Object Lesson | API security |
+| b1 | SOC | The Urgent Invoice | Phishing analysis |
+| b2 | SOC | Impossible Travel | SIEM investigation |
+| b3 | SOC | Encoded Payload | Malware analysis |
+| x1 | Both | Suspicious Activity Detected | Red vs SOC |
 
-At 100% heat the SOC catches you and the engagement ends.
+## Scoring
 
-## Walkthrough (spoiler)
+| Component | Effect |
+|---|---|
+| Correct stage | contributes accuracy |
+| Wrong answer | −4 points each |
+| Hint revealed | −6 points each |
+| Finish within estimate | +10 points |
 
-<details>
-<summary>Mission 1 solution path</summary>
+Score is 0–100. XP = score × (1 + 0.25 × difficulty) + 10.
+
+### Ranks
+
+| XP | Rank |
+|---|---|
+| 0 | Cyber Rookie |
+| 250 | Junior Analyst |
+| 600 | Security Operator |
+| 1000 | Red Team Operator |
+| 1400 | SOC Specialist |
+| 1900 | Senior Security Specialist |
+| 2600 | Elite Cyber Operator |
+
+## Architecture
 
 ```
-scan
-connect 10.10.10.10
-cat index.html          # leftover backup credentials
-login 10.10.10.20 admin Sunshine2024
-ls
-cat flag.txt
-flag
+app.py        FastAPI routes (dashboard, missions, stages, hints)
+content.py    mission data — stages, options, hints, explanations
+engine.py     evaluation, scoring, ranks
+db.py         SQLite: players, progress, activity, achievements
+templates/    Jinja pages (dark console UI)
+static/       stylesheet
+tests/        engine + content tests
+breach.py     original CLI version (still playable)
 ```
 
-Total heat: 29%. Clean run.
-
-</details>
-
-## Design
-
-```
-breach.py
-├── MISSIONS      data-only mission definitions (hosts, creds, files, flag)
-├── Game          state: heat, current host, files read, command count
-│   ├── execute() one command → output text (no I/O, fully testable)
-│   └── run()     terminal loop, prints, handles Win/Caught/Quit
-└── save_score()  appends results to ~/.breach_scores.json
-```
-
-The engine has **no `print` inside command handlers** — `execute()` returns
-text, `run()` prints it. That separation is what makes the tests possible.
+Commands are evaluated by pure functions in `engine.py`, so scoring is
+unit-tested without running the web server.
 
 ## Tests
 
 ```bash
-python3 -m unittest discover -s tests -v
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v
 ```
 
-Covers: recon, access control, credential handling, file reads, objective
-gating, heat cap, mission 3 exploit path, and parser edge cases.
+42 tests: CLI engine, web scoring, rank thresholds, stage evaluation,
+partial credit for reports, and mission content integrity.
 
-## Engineering notes — what I learned building this
+## CLI version
 
-1. **Separate the engine from the terminal.** `execute()` returns text; `run()`
-   prints it. That single decision made 22 tests possible and would let a web
-   front-end drop in later without touching the game logic.
-2. **Missions are data, not code.** Adding a mission means adding a dict — no
-   engine changes. Content and logic stay independent.
-3. **Game-over is an exception, not a flag.** `Win`, `Caught`, and `Quit` unwind
-   through one exit path, so no handler can silently continue after the
-   engagement ends.
-4. **Detection is a design constraint.** The heat meter forces the player to
-   think about noise: every scan, failed login, and exploit costs something.
-   That is the same trade-off as a real engagement.
-5. **No randomness.** Deterministic missions mean reproducible tests and fair
-   speed-runs.
-6. **Zero dependencies.** Standard library only: clone and run in one command.
-
-## Recording a demo
+The original terminal game still works:
 
 ```bash
-# scripted playthrough, no recording
-./demo.sh
-
-# record a cast file and convert it to a GIF
-./record.sh
+python3 breach.py      # mission 1
+./demo.sh              # scripted playthrough
 ```
-
-`record.sh` wraps `asciinema rec` and `agg` (install with
-`brew install asciinema agg`). Commit `demo.gif` and reference it near the top:
-
-```markdown
-![demo](demo.gif)
-```
-
-## Roadmap
-
-- [x] Three missions
-- [x] Deterministic engine with 22 unit tests
-- [x] Demo and recording scripts
-- [ ] More missions (web, AD-style chain, API)
-- [ ] Score table rendering
-- [ ] Optional web front-end (FastAPI + xterm.js)
-- [ ] Save/resume per mission
 
 ## Disclaimer
 
-All hosts, credentials, and flags are fictional. This is a simulation.
-Real testing requires explicit written authorization.
+Every host, credential, and log line is fictional. Real security testing
+requires explicit written authorization.
