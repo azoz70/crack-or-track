@@ -12,6 +12,10 @@ touches a real network.
 
 ![CRACK OR TRACK camel mascot](static/logo.svg)
 
+## Demo
+
+![CRACK OR TRACK terminal demo](demo.gif)
+
 ## Features
 
 - **Two tracks** — Red Team (recon, web, API) and SOC (phishing, SIEM, malware)
