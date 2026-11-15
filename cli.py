@@ -100,11 +100,12 @@ def paint(text, code):
 
 
 def print_banner():
-    art = Path(__file__).with_name("cli_art.txt")
-    if art.exists():
-        for line in art.read_text().splitlines():
-            print(paint(line, GREEN))
-    print(paint("  CRACK OR TRACK", GREEN + "\033[1m"))
+    for name in ("cli_wordmark.txt", "cli_art.txt"):
+        f = Path(__file__).with_name(name)
+        if f.exists():
+            for line in f.read_text().splitlines():
+                print(paint(line, GREEN))
+            print()
     print(paint("  BY ABO SARA", GOLD))
     print(paint("  Crack the System. Track the Threat.", DIM))
     print()

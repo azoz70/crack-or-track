@@ -92,6 +92,7 @@ templates/      Jinja pages (green console UI)
 static/         logo and stylesheet
 cli.py          terminal version
 cli_art.txt     camel mascot rendered as green ASCII character art
+cli_wordmark.txt  CRACK OR TRACK block-letter wordmark
 tools/          CLI art generator
 tests/          engine, scoring, content tests
 ```

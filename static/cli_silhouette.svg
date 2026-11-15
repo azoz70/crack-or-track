@@ -90,4 +90,9 @@
         stroke="#000" stroke-width="7" fill="none" stroke-linecap="round" opacity="1"/>
   <path d="M132 398 C 112 376 138 358 120 336 C 106 318 126 306 116 290"
         stroke="#000" stroke-width="5" fill="none" stroke-linecap="round" opacity="1"/>
+
+  <ellipse cx="221" cy="204" rx="30" ry="34" fill="#9A9A9A"/>
+  <ellipse cx="291" cy="204" rx="30" ry="34" fill="#9A9A9A"/>
+  <circle cx="226" cy="208" r="11" fill="#000000"/>
+  <circle cx="286" cy="208" r="11" fill="#000000"/>
 </svg>
