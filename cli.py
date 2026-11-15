@@ -275,7 +275,6 @@ class Game:
 
     # ---------- main loop ----------
     def run(self):
-        print_banner()
         print(paint("== CRACK MISSION ==", RED) + f" {self.m['name']}")
         print(self.m["brief"])
         print("Type 'help' for commands.\n")
@@ -317,14 +316,59 @@ def save_score(mission, seconds, heat, commands):
     SCORES.write_text(json.dumps(data, indent=2))
 
 
-def main():
-    mission = MISSIONS[0]
-    if len(sys.argv) > 1:
-        try:
-            mission = MISSIONS[int(sys.argv[1]) - 1]
-        except (ValueError, IndexError):
-            raise SystemExit(f"Usage: {sys.argv[0]} [1-{len(MISSIONS)}]")
+WELCOME = """\
+CRACK OR TRACK is a cybersecurity training game.
 
+  CRACK (Red Team) — find weaknesses: recon, web apps, APIs.
+  TRACK (SOC)      — detect and respond: phishing, SIEM, malware.
+
+You learn by doing: play missions or test yourself with quizzes.
+Every host, log, and flag is fictional. Nothing touches a real network."""
+
+
+def welcome():
+    print(paint(WELCOME, DIM))
+    print(paint("  Commands: 1 CRACK · 2 TRACK · 3 Quiz · 4 How to play · 5 Exit", GOLD))
+
+
+def run_quiz(topic):
+    import quiz as quizmod
+    questions = quizmod.QUIZZES[topic]
+    print(paint(f"\n== QUIZ: {topic} ==\n", GREEN + "\033[1m"))
+    score = 0
+    for i, q in enumerate(questions, 1):
+        print(paint(f"Q{i}. {q['q']}", GREEN))
+        for j, opt in enumerate(q["o"]):
+            print(f"   {j + 1}) {opt}")
+        while True:
+            ans = input(paint("   Answer (1-4, q to quit): ", GOLD)).strip()
+            if ans.lower() == "q":
+                return
+            if ans in ("1", "2", "3", "4"):
+                break
+            print("   Enter 1-4.")
+        if int(ans) - 1 == q["a"]:
+            print(paint("   Correct", GREEN))
+            score += 1
+        else:
+            print(paint(f"   The answer was {q['a'] + 1}", RED))
+        print(paint(f"   {q['why']}", DIM))
+        print()
+    pct = round(score / len(questions) * 100)
+    print(paint(f"  Score: {score}/{len(questions)} ({pct}%)", GOLD + "\033[1m"))
+
+
+def menu():
+    print(paint("  ────────────────────────────────", DIM))
+    print(paint("  [1] CRACK — play a Red Team mission", RED))
+    print(paint("  [2] TRACK — SOC quiz (phishing, SIEM, malware)", BLUE))
+    print(paint("  [3] Quiz — 10 questions per topic", GOLD))
+    print(paint("  [4] How to play", DIM))
+    print(paint("  [5] Exit", DIM))
+
+
+def play_mission(idx):
+    mission = MISSIONS[idx]
     game = Game(mission)
     try:
         game.run()
@@ -332,6 +376,72 @@ def main():
         elapsed = time.time() - game.t0
         save_score(mission["name"], elapsed, game.heat, game.commands)
         print(f"\n time: {elapsed:.1f}s | heat: {game.heat}% | commands: {game.commands}")
+
+
+def play_mission_menu():
+    print()
+    for i, m in enumerate(MISSIONS, 1):
+        print(paint(f"  [{i}] {m['name']}", RED))
+    print(paint("  [b] back", DIM))
+    c = input(paint("  > ", GREEN)).strip()
+    if c.lower() == "b":
+        return
+    if c.isdigit() and 1 <= int(c) <= len(MISSIONS):
+        play_mission(int(c) - 1)
+
+
+def quiz_topic_menu(scope="all"):
+    import quiz as quizmod
+    topics = list(quizmod.QUIZZES.keys())
+    if scope == "blue":
+        topics = ["Phishing Analysis", "SIEM Investigation", "Malware Analysis"]
+    print()
+    for i, t in enumerate(topics, 1):
+        color = BLUE if t in ("Phishing Analysis", "SIEM Investigation", "Malware Analysis") else RED
+        print(paint(f"  [{i}] {t}", color))
+    print(paint("  [b] back", DIM))
+    c = input(paint("  > ", GREEN)).strip()
+    if c.lower() == "b":
+        return
+    if c.isdigit() and 1 <= int(c) <= len(topics):
+        run_quiz(topics[int(c) - 1])
+
+
+def choose():
+    while True:
+        menu()
+        c = input(paint("  > ", GREEN)).strip()
+        if c == "1":
+            play_mission_menu()
+        elif c == "2":
+            quiz_topic_menu("blue")
+        elif c == "3":
+            quiz_topic_menu("all")
+        elif c == "4":
+            print()
+            welcome()
+            print()
+        elif c == "5" or c.lower() in ("q", "exit"):
+            print(paint("  Goodbye.", DIM))
+            return
+        else:
+            print(paint("  Choose 1-5.", DIM))
+
+
+def main():
+    print_banner()
+    print()
+    if len(sys.argv) > 1:
+        try:
+            idx = int(sys.argv[1]) - 1
+            if 0 <= idx < len(MISSIONS):
+                play_mission(idx)
+                return
+        except ValueError:
+            pass
+    welcome()
+    print()
+    choose()
 
 
 if __name__ == "__main__":
