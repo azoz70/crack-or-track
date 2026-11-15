@@ -103,25 +103,7 @@ tests/          engine, scoring, content tests
 
 ## Mascot
 
-The camel mascot (`static/logo.svg`) is the game's identity: long muzzle,
-gold-rimmed glasses, and a saddle — confident, friendly, and recognisable at
-icon size. It is used in the sidebar, dashboard, mission results, and favicon.
-This mascot does **not** smoke.
-
-![Camel mascot](static/logo.png)
-
-A second, smoking variant (`static/logo_cli.svg`) is used only by the terminal
-version. It adds a cigarette and smoke puffs, and is rendered as classic
-character-based ASCII art (`cli_art.txt`) in green at startup, in the style of
-classic terminal tool banners.
-
-![Smoking mascot](static/logo_cli.png)
-
-Regenerate the ASCII art with:
-
-```bash
-./.venv/bin/python tools/make_cli_art.py
-```
+A camel mascot (`static/logo.svg`) with gold-rimmed glasses gives the project its identity; the terminal banner is rendered from it as green ASCII art.
 
 ## Tests
 
