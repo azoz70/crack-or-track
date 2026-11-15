@@ -78,16 +78,20 @@
   <!-- tuft -->
   <path d="M246 78 Q 251 62 256 76 M256 76 Q 261 60 266 78" stroke="#B99668" stroke-width="6" fill="none" stroke-linecap="round"/>
 
-  <!-- cigarette held in the mouth -->
-  <g transform="rotate(12 236 424)">
-    <rect x="146" y="418" width="96" height="12" rx="6" fill="#F7F4EA" stroke="#CFC8B4" stroke-width="2"/>
-    <rect x="146" y="418" width="22" height="12" rx="6" fill="#C9692F"/>
-    <circle cx="152" cy="424" r="5.5" fill="#FFB35C"/>
-    <circle cx="158" cy="424" r="3" fill="#FF7A2F" opacity="0.9"/>
+  <!-- cigarette held in the mouth, pointing out and down -->
+  <g transform="rotate(-14 220 420)">
+    <rect x="96" y="412" width="126" height="16" rx="8" fill="#FFFFFF" stroke="#B8B0A0" stroke-width="2.5"/>
+    <rect x="96" y="412" width="28" height="16" rx="8" fill="#E07A3F"/>
+    <rect x="96" y="412" width="13" height="16" rx="8" fill="#FF8C42"/>
+    <circle cx="104" cy="420" r="7" fill="#FFB347"/>
   </g>
-  <!-- smoke curls -->
-  <path d="M150 410 C 128 386 158 368 136 342 C 116 318 148 302 132 278"
-        stroke="#B9D8CB" stroke-width="7" fill="none" stroke-linecap="round" opacity="0.55"/>
-  <path d="M132 398 C 112 376 138 358 120 336 C 106 318 126 306 116 290"
-        stroke="#B9D8CB" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.32"/>
+  <rect x="90" y="414" width="9" height="9" rx="3" fill="#8B8B8B"/>
+  <!-- smoke puffs -->
+  <circle cx="92" cy="392" r="10" fill="#C9DCC9" opacity="0.7"/>
+  <circle cx="74" cy="366" r="13" fill="#C9DCC9" opacity="0.65"/>
+  <circle cx="58" cy="336" r="16" fill="#C9DCC9" opacity="0.6"/>
+  <circle cx="46" cy="300" r="18" fill="#C9DCC9" opacity="0.5"/>
+  <circle cx="104" cy="372" r="8" fill="#E4F0E4" opacity="0.45"/>
+  <circle cx="90" cy="340" r="11" fill="#E4F0E4" opacity="0.4"/>
+  <circle cx="80" cy="306" r="13" fill="#E4F0E4" opacity="0.35"/>
 </svg>
