@@ -2,6 +2,7 @@
 {% block crumb %}{{ m.title }} — result{% endblock %}
 {% block content %}
 <div class="card narrow">
+  <img class="result-logo" src="/static/logo.svg" alt="CRACK OR TRACK mascot">
   <div class="verdict {{ 'ok' if result.score >= 70 else 'bad' }}">Mission complete</div>
   <h2 class="score-big">{{ result.score }}<span>/100</span></h2>
   <div class="grid stats small">

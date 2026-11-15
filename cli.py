@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-BREACH — a terminal hacking simulator.
+CRACK OR TRACK — a terminal hacking simulator.
 
 You are a red-team operator with an authorized scope and a detection meter.
 Complete the objective before detection reaches 100.
@@ -14,7 +14,7 @@ import sys
 import time
 from pathlib import Path
 
-SCORES = Path.home() / ".breach_scores.json"
+SCORES = Path.home() / ".crack_or_track_scores.json"
 MAX_HEAT = 100
 
 MISSIONS = [
@@ -82,14 +82,32 @@ MISSIONS = [
     },
 ]
 
-BANNER = r"""
-  ____  ____  _____    _    ____ _   _
- | __ )|  _ \| ____|  / \  / ___| | | |
- |  _ \| |_) |  _|   / _ \| |   | |_| |
- | |_) |  _ <| |___ / ___ \ |___|  _  |
- |____/|_| \_\_____/_/   \_\____|_| |_|
-        terminal hacking simulator
-"""
+GREEN = "\033[38;2;16;185;129m"
+GOLD = "\033[38;2;212;175;55m"
+RED = "\033[38;2;229;72;77m"
+BLUE = "\033[38;2;59;130;246m"
+DIM = "\033[2m"
+RESET = "\033[0m"
+
+
+def _color_enabled():
+    import os
+    return sys.stdout.isatty() and not os.environ.get("NO_COLOR")
+
+
+def paint(text, code):
+    return f"{code}{text}{RESET}" if _color_enabled() else text
+
+
+def print_banner():
+    art = Path(__file__).with_name("cli_art.txt")
+    if art.exists() and _color_enabled():
+        print(art.read_text())
+    print(paint("  CRACK OR TRACK", GREEN + "\033[1m"))
+    print(paint("  BY ABO SARA", GOLD))
+    print(paint("  Crack the System. Track the Threat.", DIM))
+    print()
+
 
 HELP = """
 scan                 enumerate hosts in scope          (+5 heat)
@@ -255,14 +273,14 @@ class Game:
 
     # ---------- main loop ----------
     def run(self):
-        print(BANNER)
-        print(f"== {self.m['name']} ==")
+        print_banner()
+        print(paint("== CRACK MISSION ==", RED) + f" {self.m['name']}")
         print(self.m["brief"])
         print("Type 'help' for commands.\n")
 
         while True:
             try:
-                line = input(f"breach [{self.heat}%] > ")
+                line = input(paint(f"crack [{self.heat}%] > ", GREEN))
             except (EOFError, KeyboardInterrupt):
                 print("\n[!] Session aborted.")
                 return

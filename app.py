@@ -12,7 +12,7 @@ import db
 import engine
 from content import BY_ID, MISSIONS
 
-app = FastAPI(title="Crack or Track by Abo Sara")
+app = FastAPI(title="CRACK OR TRACK by Abo Sara")
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 

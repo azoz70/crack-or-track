@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Tests for the BREACH game engine (no I/O, no network)."""
+"""Tests for the CRACK OR TRACK CLI engine (no I/O, no network)."""
 
 import sys
 import unittest
@@ -7,8 +7,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-import breach
-from breach import Game, MISSIONS, Caught, Win, MAX_HEAT
+import cli
+from cli import Game, MISSIONS, Caught, Win, MAX_HEAT
 
 
 def new_game(mission=0):

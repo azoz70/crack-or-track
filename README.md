@@ -1,28 +1,33 @@
-# Crack or Track by Abo Sara
+# CRACK OR TRACK
+### BY ABO SARA
 
-A cybersecurity training game with two tracks: **Red Team operations** and
-**SOC operations**. Learn how attackers find weaknesses, and how defenders
-detect and respond — in the same product.
+**Crack the System. Track the Threat.**
+
+A cybersecurity training game with two tracks: **CRACK** (Red Team operations)
+and **TRACK** (SOC operations). Learn how attackers find weaknesses and how
+defenders detect and respond — in one product.
 
 All scenarios use fictional hosts, logs, and credentials. Nothing in the game
 touches a real network.
 
+![CRACK OR TRACK camel mascot](static/logo.svg)
+
 ## Features
 
 - **Two tracks** — Red Team (recon, web, API) and SOC (phishing, SIEM, malware)
-- **Red vs SOC crossover mission** — see the same intrusion from both sides
-- **Interactive stages** — analyze real-looking output, type commands, make
-  decisions, and write findings; no multiple-choice-only quizzes
+- **Red vs SOC crossover mission** — the same intrusion from both sides
+- **Interactive stages** — analyse output, type commands, make decisions, and
+  write findings; not a multiple-choice-only quiz
 - **Progressive hints** — four levels per mission, at a score cost
 - **XP, ranks, achievements** — progress saved in SQLite
-- **Scoring that rewards thinking** — accuracy, methodology (wrong answers),
-  efficiency (hints), and time
-- **Dark operations console UI** — dashboard, track progress, recent activity
+- **Scoring that rewards thinking** — accuracy, methodology, efficiency, time
+- **Saudi-inspired green console UI** — emerald accents, gold details,
+  red/blue markers for the two tracks
 
-## Quick start
+## Quick start (web)
 
 ```bash
-cd breach
+cd crack-or-track
 python3 -m venv .venv
 ./.venv/bin/pip install fastapi "uvicorn[standard]" jinja2 python-multipart
 ./run.sh
@@ -30,25 +35,36 @@ python3 -m venv .venv
 
 Open **http://127.0.0.1:8800**.
 
+## Quick start (terminal)
+
+```bash
+python3 cli.py        # mission 1
+python3 cli.py 2      # mission 2
+./demo.sh             # scripted playthrough
+```
+
+The terminal version prints the camel mascot using 24-bit colour blocks when
+the terminal supports it, and falls back to a clean text banner otherwise.
+
 ## Missions
 
 | ID | Track | Title | Category |
 |---|---|---|---|
-| r1 | Red | Silent Recon | Reconnaissance |
-| r2 | Red | Broken Login | Web application |
-| r3 | Red | Object Lesson | API security |
-| b1 | SOC | The Urgent Invoice | Phishing analysis |
-| b2 | SOC | Impossible Travel | SIEM investigation |
-| b3 | SOC | Encoded Payload | Malware analysis |
-| x1 | Both | Suspicious Activity Detected | Red vs SOC |
+| r1 | CRACK | Silent Recon | Reconnaissance |
+| r2 | CRACK | Broken Login | Web application |
+| r3 | CRACK | Object Lesson | API security |
+| b1 | TRACK | The Urgent Invoice | Phishing analysis |
+| b2 | TRACK | Impossible Travel | SIEM investigation |
+| b3 | TRACK | Encoded Payload | Malware analysis |
+| x1 | CRACK vs TRACK | Suspicious Activity Detected | Red vs SOC |
 
 ## Scoring
 
 | Component | Effect |
 |---|---|
 | Correct stage | contributes accuracy |
-| Wrong answer | −4 points each |
-| Hint revealed | −6 points each |
+| Wrong answer | −4 points |
+| Hint revealed | −6 points |
 | Finish within estimate | +10 points |
 
 Score is 0–100. XP = score × (1 + 0.25 × difficulty) + 10.
@@ -68,18 +84,24 @@ Score is 0–100. XP = score × (1 + 0.25 × difficulty) + 10.
 ## Architecture
 
 ```
-app.py        FastAPI routes (dashboard, missions, stages, hints)
-content.py    mission data — stages, options, hints, explanations
-engine.py     evaluation, scoring, ranks
-db.py         SQLite: players, progress, activity, achievements
-templates/    Jinja pages (dark console UI)
-static/       stylesheet
-tests/        engine + content tests
-breach.py     original CLI version (still playable)
+app.py          FastAPI routes (dashboard, missions, stages, hints)
+content.py      mission data — stages, options, hints, explanations
+engine.py       evaluation, scoring, ranks
+db.py           SQLite: players, progress, activity, achievements
+templates/      Jinja pages (green console UI)
+static/         logo and stylesheet
+cli.py          terminal version
+cli_art.txt     camel mascot rendered as ANSI colour blocks
+tools/          CLI art generator
+tests/          engine, scoring, content tests
 ```
 
-Commands are evaluated by pure functions in `engine.py`, so scoring is
-unit-tested without running the web server.
+## Mascot
+
+The camel mascot (`static/logo.svg`) is the game's identity: long muzzle,
+sunglasses, gold-rimmed glasses, and a saddle — confident, friendly, and
+recognisable at icon size. It is used in the sidebar, dashboard, mission
+results, favicon, and the terminal banner.
 
 ## Tests
 
@@ -87,17 +109,7 @@ unit-tested without running the web server.
 PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v
 ```
 
-42 tests: CLI engine, web scoring, rank thresholds, stage evaluation,
-partial credit for reports, and mission content integrity.
-
-## CLI version
-
-The original terminal game still works:
-
-```bash
-python3 breach.py      # mission 1
-./demo.sh              # scripted playthrough
-```
+42 tests across the CLI engine and the web scoring engine.
 
 ## Disclaimer
 

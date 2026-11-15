@@ -3,23 +3,25 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% block title %}Crack or Track{% endblock %}</title>
+  <title>{% block title %}CRACK OR TRACK — by Abo Sara{% endblock %}</title>
+  <link rel="icon" href="/static/logo.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
 <div class="app">
   <aside class="sidebar">
     <div class="brand">
-      <div class="logo">◈</div>
-      <div>
-        <h1>Crack or Track</h1>
-        <small>by Abo Sara</small>
+      <img class="brand-logo" src="/static/logo.svg" alt="CRACK OR TRACK camel mascot">
+      <div class="brand-text">
+        <h1>CRACK OR TRACK</h1>
+        <small>BY ABO SARA</small>
+        <span class="tagline">Crack the System. Track the Threat.</span>
       </div>
     </div>
     <nav>
       <a href="/" class="{{ 'active' if active == 'dashboard' else '' }}">Dashboard</a>
-      <a href="/missions?track=red" class="{{ 'active' if active == 'red' else '' }}">Red Team</a>
-      <a href="/missions?track=blue" class="{{ 'active' if active == 'blue' else '' }}">SOC</a>
+      <a href="/missions?track=red" class="{{ 'active' if active == 'red' else '' }}">CRACK · Red Team</a>
+      <a href="/missions?track=blue" class="{{ 'active' if active == 'blue' else '' }}">TRACK · SOC</a>
       <a href="/missions" class="{{ 'active' if active == 'all' else '' }}">All missions</a>
     </nav>
     <div class="player-mini">
@@ -32,8 +34,8 @@
     <header class="topbar">
       <div class="crumb">{% block crumb %}Operations console{% endblock %}</div>
       <div class="badges">
-        <span class="badge red">RED</span>
-        <span class="badge blue">SOC</span>
+        <span class="badge red">CRACK</span>
+        <span class="badge blue">TRACK</span>
       </div>
     </header>
     <section class="content">

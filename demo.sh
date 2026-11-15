@@ -17,4 +17,4 @@ commands=(
 for c in "${commands[@]}"; do
   sleep 0.8
   printf '%s\n' "$c"
-done | python3 breach.py
+done | python3 cli.py
