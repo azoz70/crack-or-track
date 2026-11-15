@@ -37,9 +37,13 @@ python3 -m venv .venv
 ./run.sh
 ```
 
-Open **http://127.0.0.1:8800**.
+Open **http://127.0.0.1:8800** — this is **local-only** (your own machine).
+To share the app online, use the **Deploy** section below.
 
 ## Deploy (live demo)
+
+> **`127.0.0.1:8800` is local-only.** Deploy below to get a public URL that
+> other people can open.
 
 The web app ships with a `Dockerfile` and a `render.yaml` blueprint, so it runs
 on any Docker host or on Render's free tier.
@@ -56,9 +60,9 @@ Render reads `render.yaml` and deploys automatically. The app answers at
 ## Quick start (terminal)
 
 ```bash
-python3 cli.py        # mission 1
-python3 cli.py 2      # mission 2
-./demo.sh             # scripted playthrough
+python3 cli.py        # opens the main menu
+python3 cli.py 2      # jump straight into mission 2
+./demo.sh             # scripted playthrough (for recording)
 ```
 
 The terminal version prints the camel mascot as green ASCII character art.
@@ -108,10 +112,14 @@ db.py           SQLite: players, progress, activity, achievements
 templates/      Jinja pages (green console UI)
 static/         logo and stylesheet
 cli.py          terminal version
+quiz.py         quiz bank (English + Arabic)
 cli_art.txt     camel mascot rendered as green ASCII character art
 cli_wordmark.txt  CRACK OR TRACK block-letter wordmark
 tools/          CLI art generator
 tests/          engine, scoring, content tests
+requirements.txt  Python dependencies
+Dockerfile      container image for deployment
+render.yaml     Render blueprint
 ```
 
 ## Mascot
