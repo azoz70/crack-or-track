@@ -54,7 +54,7 @@ cat flag.txt
 flag
 ```
 
-Total heat: ~18%. Clean run.
+Total heat: 29%. Clean run.
 
 </details>
 
