@@ -91,7 +91,7 @@ db.py           SQLite: players, progress, activity, achievements
 templates/      Jinja pages (green console UI)
 static/         logo and stylesheet
 cli.py          terminal version
-cli_art.txt     camel mascot rendered as ANSI colour blocks
+cli_art.txt     camel mascot rendered as green ASCII character art
 tools/          CLI art generator
 tests/          engine, scoring, content tests
 ```
@@ -103,14 +103,12 @@ gold-rimmed glasses, and a saddle — confident, friendly, and recognisable at
 icon size. It is used in the sidebar, dashboard, mission results, and favicon.
 
 The terminal version uses a smoking, relaxed variant (`static/logo_cli.svg`)
-rendered as a green ANSI truecolor banner (`cli_art.txt`) at startup, in the
-style of classic terminal tool banners. Regenerate it with:
+rendered as classic character-based ASCII art (`cli_art.txt`) in green at
+startup, in the style of classic terminal tool banners. Regenerate it with:
 
 ```bash
 ./.venv/bin/python tools/make_cli_art.py
 ```
-
-![Terminal banner preview](static/cli_banner_preview.png)
 
 ## Tests
 
