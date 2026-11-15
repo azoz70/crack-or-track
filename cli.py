@@ -335,27 +335,33 @@ def run_quiz(topic):
     import quiz as quizmod
     questions = quizmod.QUIZZES[topic]
     print(paint(f"\n== QUIZ: {topic} ==\n", GREEN + "\033[1m"))
+    lang = input(paint("  Language / اللغة: [1] English  [2] العربية  ", GOLD)).strip()
+    ar = lang == "2"
     score = 0
     for i, q in enumerate(questions, 1):
-        print(paint(f"Q{i}. {q['q']}", GREEN))
-        for j, opt in enumerate(q["o"]):
+        question = q["q_ar"] if ar else q["q"]
+        options = q["o_ar"] if ar else q["o"]
+        why = q["why_ar"] if ar else q["why"]
+        print(paint(f"Q{i}. {question}", GREEN))
+        for j, opt in enumerate(options):
             print(f"   {j + 1}) {opt}")
+        prompt = "   الإجابة (1-4، q للخروج): " if ar else "   Answer (1-4, q to quit): "
         while True:
-            ans = input(paint("   Answer (1-4, q to quit): ", GOLD)).strip()
+            ans = input(paint(prompt, GOLD)).strip()
             if ans.lower() == "q":
                 return
             if ans in ("1", "2", "3", "4"):
                 break
-            print("   Enter 1-4.")
+            print("   1-4" if ar else "   Enter 1-4.")
         if int(ans) - 1 == q["a"]:
-            print(paint("   Correct", GREEN))
+            print(paint("   ✓ صحيح" if ar else "   ✓ Correct", GREEN))
             score += 1
         else:
-            print(paint(f"   The answer was {q['a'] + 1}", RED))
-        print(paint(f"   {q['why']}", DIM))
+            print(paint(f"   الإجابة الصحيحة: {q['a'] + 1}" if ar else f"   The answer was {q['a'] + 1}", RED))
+        print(paint(f"   {why}", DIM))
         print()
     pct = round(score / len(questions) * 100)
-    print(paint(f"  Score: {score}/{len(questions)} ({pct}%)", GOLD + "\033[1m"))
+    print(paint(f"  النتيجة: {score}/{len(questions)} ({pct}%)" if ar else f"  Score: {score}/{len(questions)} ({pct}%)", GOLD + "\033[1m"))
 
 
 def menu():
