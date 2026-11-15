@@ -33,11 +33,25 @@ touches a real network.
 ```bash
 cd crack-or-track
 python3 -m venv .venv
-./.venv/bin/pip install fastapi "uvicorn[standard]" jinja2 python-multipart
+./.venv/bin/pip install -r requirements.txt
 ./run.sh
 ```
 
 Open **http://127.0.0.1:8800**.
+
+## Deploy (live demo)
+
+The web app ships with a `Dockerfile` and a `render.yaml` blueprint, so it runs
+on any Docker host or on Render's free tier.
+
+```bash
+docker build -t crack-or-track .
+docker run -p 8800:8000 crack-or-track
+```
+
+Or on [Render](https://render.com): **New → Web Service → connect this repo** —
+Render reads `render.yaml` and deploys automatically. The app answers at
+`/health` and serves the UI on port 8000.
 
 ## Quick start (terminal)
 
@@ -47,8 +61,7 @@ python3 cli.py 2      # mission 2
 ./demo.sh             # scripted playthrough
 ```
 
-The terminal version prints the camel mascot using 24-bit colour blocks when
-the terminal supports it, and falls back to a clean text banner otherwise.
+The terminal version prints the camel mascot as green ASCII character art.
 
 ## Missions
 
