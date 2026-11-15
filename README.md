@@ -81,8 +81,45 @@ python3 -m unittest discover -s tests -v
 Covers: recon, access control, credential handling, file reads, objective
 gating, heat cap, mission 3 exploit path, and parser edge cases.
 
+## Engineering notes — what I learned building this
+
+1. **Separate the engine from the terminal.** `execute()` returns text; `run()`
+   prints it. That single decision made 22 tests possible and would let a web
+   front-end drop in later without touching the game logic.
+2. **Missions are data, not code.** Adding a mission means adding a dict — no
+   engine changes. Content and logic stay independent.
+3. **Game-over is an exception, not a flag.** `Win`, `Caught`, and `Quit` unwind
+   through one exit path, so no handler can silently continue after the
+   engagement ends.
+4. **Detection is a design constraint.** The heat meter forces the player to
+   think about noise: every scan, failed login, and exploit costs something.
+   That is the same trade-off as a real engagement.
+5. **No randomness.** Deterministic missions mean reproducible tests and fair
+   speed-runs.
+6. **Zero dependencies.** Standard library only: clone and run in one command.
+
+## Recording a demo
+
+```bash
+# scripted playthrough, no recording
+./demo.sh
+
+# record a cast file and convert it to a GIF
+./record.sh
+```
+
+`record.sh` wraps `asciinema rec` and `agg` (install with
+`brew install asciinema agg`). Commit `demo.gif` and reference it near the top:
+
+```markdown
+![demo](demo.gif)
+```
+
 ## Roadmap
 
+- [x] Three missions
+- [x] Deterministic engine with 22 unit tests
+- [x] Demo and recording scripts
 - [ ] More missions (web, AD-style chain, API)
 - [ ] Score table rendering
 - [ ] Optional web front-end (FastAPI + xterm.js)
