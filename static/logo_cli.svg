@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0B4A34"/><stop offset="1" stop-color="#041C14"/>
+    </linearGradient>
+    <linearGradient id="body" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#D9BA8B"/><stop offset="1" stop-color="#A9865A"/>
+    </linearGradient>
+    <linearGradient id="sand" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#F7EACF"/><stop offset="1" stop-color="#DCBF92"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.35" r="0.6">
+      <stop offset="0" stop-color="#1E8F63" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#1E8F63" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <circle cx="256" cy="230" r="210" fill="url(#glow)"/>
+
+  <!-- body with hump -->
+  <path d="M14 512 C 32 436 78 396 140 390 C 192 386 224 410 254 410
+           C 300 410 330 372 382 360 C 438 348 478 384 496 440
+           C 502 468 504 492 504 512 Z" fill="url(#body)"/>
+
+  <!-- saddle on the hump -->
+  <path d="M336 402 C 366 382 420 376 470 396 L 462 436 C 416 414 372 418 342 440 Z"
+        fill="#0F5132" stroke="#D4AF37" stroke-width="5"/>
+  <path d="M352 412 C 382 398 424 394 458 406" stroke="#D4AF37" stroke-width="3" fill="none" opacity="0.8"/>
+  <path d="M350 440 L342 456 M370 434 L366 452 M448 434 L454 452 M462 430 L470 446"
+        stroke="#D4AF37" stroke-width="4" stroke-linecap="round"/>
+
+  <!-- neck -->
+  <path d="M208 350 C 200 410 204 460 218 492 C 232 516 280 516 294 492
+           C 308 460 312 410 304 350 Z" fill="#DCBF92"/>
+
+  <!-- ears -->
+  <path d="M170 180 C 148 168 138 146 148 134 C 162 124 184 140 190 164 Z" fill="#DCBF92"/>
+  <path d="M342 180 C 364 168 374 146 364 134 C 350 124 328 140 322 164 Z" fill="#DCBF92"/>
+  <path d="M172 172 C 158 162 152 148 158 141 C 168 137 180 150 184 166 Z" fill="#B99668"/>
+  <path d="M340 172 C 354 162 360 148 354 141 C 344 137 332 150 328 166 Z" fill="#B99668"/>
+
+  <!-- long camel face -->
+  <path d="M256 76 C 200 76 164 128 164 198 C 164 246 170 300 174 350
+           C 178 412 212 446 256 446 C 300 446 334 412 338 350
+           C 342 300 348 246 348 198 C 348 128 312 76 256 76 Z" fill="url(#sand)"/>
+  <ellipse cx="256" cy="370" rx="78" ry="62" fill="#EBD3AC" opacity="0.55"/>
+
+  <!-- brows -->
+  <path d="M200 158 Q 220 148 240 158" stroke="#6B4F2A" stroke-width="7" fill="none" stroke-linecap="round"/>
+  <path d="M272 158 Q 292 148 312 158" stroke="#6B4F2A" stroke-width="7" fill="none" stroke-linecap="round"/>
+
+  <!-- eyes -->
+  <ellipse cx="221" cy="204" rx="27" ry="30" fill="#FFFFFF"/>
+  <ellipse cx="291" cy="204" rx="27" ry="30" fill="#FFFFFF"/>
+  <circle cx="225" cy="208" r="12" fill="#14261C"/>
+  <circle cx="287" cy="208" r="12" fill="#14261C"/>
+  <circle cx="230" cy="202" r="4.5" fill="#FFFFFF"/>
+  <circle cx="292" cy="202" r="4.5" fill="#FFFFFF"/>
+
+  <!-- glasses -->
+  <rect x="190" y="172" width="62" height="64" rx="15" fill="none" stroke="#D4AF37" stroke-width="7"/>
+  <rect x="260" y="172" width="62" height="64" rx="15" fill="none" stroke="#D4AF37" stroke-width="7"/>
+  <line x1="252" y1="202" x2="260" y2="202" stroke="#D4AF37" stroke-width="7"/>
+  <line x1="190" y1="190" x2="172" y2="182" stroke="#D4AF37" stroke-width="7" stroke-linecap="round"/>
+  <line x1="322" y1="190" x2="340" y2="182" stroke="#D4AF37" stroke-width="7" stroke-linecap="round"/>
+
+  <!-- nostrils -->
+  <path d="M222 340 C 211 340 206 351 211 362 C 217 372 231 371 235 361 C 239 351 233 340 222 340 Z" fill="#6B4F2A"/>
+  <path d="M290 340 C 279 340 274 351 279 362 C 285 372 299 371 303 361 C 307 351 301 340 290 340 Z" fill="#6B4F2A"/>
+
+  <!-- split lip + smile -->
+  <path d="M256 356 L256 398" stroke="#C9A876" stroke-width="5" stroke-linecap="round"/>
+  <path d="M224 398 C 224 386 240 380 256 380 C 272 380 288 386 288 398
+           C 288 414 272 424 256 424 C 240 424 224 414 224 398 Z" fill="#EBD3AC" stroke="#C9A876" stroke-width="4"/>
+  <path d="M200 410 Q 228 430 256 422 Q 284 430 312 410" stroke="#4A3720" stroke-width="7" fill="none" stroke-linecap="round"/>
+
+  <!-- tuft -->
+  <path d="M246 78 Q 251 62 256 76 M256 76 Q 261 60 266 78" stroke="#B99668" stroke-width="6" fill="none" stroke-linecap="round"/>
+
+  <!-- cigarette held in the mouth -->
+  <g transform="rotate(12 236 424)">
+    <rect x="146" y="418" width="96" height="12" rx="6" fill="#F7F4EA" stroke="#CFC8B4" stroke-width="2"/>
+    <rect x="146" y="418" width="22" height="12" rx="6" fill="#C9692F"/>
+    <circle cx="152" cy="424" r="5.5" fill="#FFB35C"/>
+    <circle cx="158" cy="424" r="3" fill="#FF7A2F" opacity="0.9"/>
+  </g>
+  <!-- smoke curls -->
+  <path d="M150 410 C 128 386 158 368 136 342 C 116 318 148 302 132 278"
+        stroke="#B9D8CB" stroke-width="7" fill="none" stroke-linecap="round" opacity="0.55"/>
+  <path d="M132 398 C 112 376 138 358 120 336 C 106 318 126 306 116 290"
+        stroke="#B9D8CB" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.32"/>
+</svg>
