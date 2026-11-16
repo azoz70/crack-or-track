@@ -1,16 +1,16 @@
 {% extends "base.html" %}
-{% block crumb %}Missions{% endblock %}
+{% block crumb %}{{ S.nav_all }}{% endblock %}
 {% block content %}
 <div class="section-head">
   <h2>
-    {% if active == 'red' %}Red Team Operations
-    {% elif active == 'blue' %}SOC Operations
-    {% else %}All missions{% endif %}
+    {% if active == 'red' %}{{ S.nav_red }}
+    {% elif active == 'blue' %}{{ S.nav_blue }}
+    {% else %}{{ S.nav_all }}{% endif %}
   </h2>
   <div class="filters">
-    <a class="chip {{ 'on' if active == 'red' else '' }}" href="/missions?track=red">Red</a>
-    <a class="chip {{ 'on' if active == 'blue' else '' }}" href="/missions?track=blue">SOC</a>
-    <a class="chip {{ 'on' if active == 'all' else '' }}" href="/missions">All</a>
+    <a class="chip {{ 'on' if active == 'red' else '' }}" href="/missions?track=red">{{ S.filter_red }}</a>
+    <a class="chip {{ 'on' if active == 'blue' else '' }}" href="/missions?track=blue">{{ S.filter_soc }}</a>
+    <a class="chip {{ 'on' if active == 'all' else '' }}" href="/missions">{{ S.filter_all }}</a>
   </div>
 </div>
 
@@ -31,8 +31,8 @@
       {% for t in m.tools %}<span class="tag">{{ t }}</span>{% endfor %}
     </div>
     <div class="mission-foot">
-      {% if p %}<span class="score">Best {{ p.best_score }}</span>{% else %}<span class="muted">Not started</span>{% endif %}
-      <a class="btn" href="/mission/{{ m.id }}">{{ 'Retry' if p else 'Start' }}</a>
+      {% if p %}<span class="score">{{ S.best }} {{ p.best_score }}</span>{% else %}<span class="muted">{{ S.not_started }}</span>{% endif %}
+      <a class="btn" href="/mission/{{ m.id }}">{{ S.retry if p else S.start }}</a>
     </div>
   </article>
   {% endfor %}

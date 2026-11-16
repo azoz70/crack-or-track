@@ -2,16 +2,57 @@
 {% block crumb %}{{ m.title }} — feedback{% endblock %}
 {% block content %}
 <div class="card narrow">
-  <div class="verdict {{ 'ok' if ok else 'bad' }}">{{ '✓ Correct' if ok else '✗ Not quite' }}</div>
-  <h3>Why</h3>
+  <div class="verdict {{ 'ok' if ok else 'bad' }}">
+    {{ S.correct if ok else S.not_quite }}
+  </div>
+
+  {% if skill %}<div class="skill-tag">{{ S.skill }}: {{ skill }}</div>{% endif %}
+
+  <h3>{{ S.why_correct if ok else S.why_incorrect }}</h3>
   <p>{{ explain }}</p>
-  <form method="post" action="/mission/{{ m.id }}/continue">
-    <input type="hidden" name="next" value="{{ next_idx }}">
-    <input type="hidden" name="score" value="{{ state.score }}">
-    <input type="hidden" name="wrong" value="{{ state.wrong }}">
-    <input type="hidden" name="hints" value="{{ state.hints }}">
-    <input type="hidden" name="started" value="{{ state.started }}">
-    <button class="btn primary" type="submit">Continue to stage {{ next_idx + 1 }}</button>
-  </form>
+
+  {% if not ok and correct_answer %}
+    <div class="correct-answer"><strong>{{ S.correct_answer }}:</strong> {{ correct_answer }}</div>
+  {% endif %}
+
+  {% if stage.option_explanations %}
+    <ul class="achievements">
+      {% for ex in stage.option_explanations %}
+      <li><span class="dot"></span><div><small>{% if stage.options %}<strong>{{ stage.options[loop.index0] }}</strong> — {% endif %}{{ ex }}</small></div></li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  {% if stage.concept %}
+    <h3>{{ S.concept }}</h3>
+    <p>{{ stage.concept }}</p>
+  {% endif %}
+
+  {% if stage.example %}
+    <h3>{{ S.example }}</h3>
+    <p class="muted">{{ stage.example }}</p>
+  {% endif %}
+
+  {% if not ok and stage.tip %}
+    <h3>{{ S.learning_tip }}</h3>
+    <p class="hint">{{ stage.tip }}</p>
+  {% endif %}
+
+  {% if m.references %}
+    <h3>{{ S.references }}</h3>
+    <ul>{% for ref in m.references %}<li><a href="{{ ref.url }}" target="_blank" rel="noopener">{{ ref.title }}</a></li>{% endfor %}</ul>
+  {% endif %}
+
+  <div class="actions">
+    <form method="post" action="/mission/{{ m.id }}/continue">
+      <input type="hidden" name="next" value="{{ next_idx }}">
+      <input type="hidden" name="score" value="{{ state.score }}">
+      <input type="hidden" name="wrong" value="{{ state.wrong }}">
+      <input type="hidden" name="hints" value="{{ state.hints }}">
+      <input type="hidden" name="started" value="{{ state.started }}">
+      <input type="hidden" name="results" value="{{ state.results|tojson|forceescape }}">
+      <button class="btn primary" type="submit">{{ S.continue }} · {{ S.stage }} {{ next_idx + 1 }}</button>
+    </form>
+  </div>
 </div>
 {% endblock %}

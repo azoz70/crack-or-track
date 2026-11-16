@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block crumb %}{{ m.title }} — {{ S.review_title }}{% endblock %}
+{% block content %}
+<div class="card narrow">
+  <div class="verdict {{ 'ok' if report.score >= 70 else 'bad' }}">{{ S.mission_complete }}</div>
+  <h2 class="score-big">{{ report.score }}<span>/100</span></h2>
+
+  <div class="grid stats small">
+    <div class="stat"><span class="label">{{ S.accuracy }}</span><strong>{{ report.accuracy }}%</strong></div>
+    <div class="stat"><span class="label">{{ S.correct_answers }}</span><strong>{{ report.correct }}/{{ report.total }}</strong></div>
+    <div class="stat"><span class="label">{{ S.incorrect_answers }}</span><strong>{{ report.incorrect }}</strong></div>
+    <div class="stat"><span class="label">{{ S.time }}</span><strong>{{ report.time }}s</strong></div>
+    <div class="stat"><span class="label">{{ S.difficulty }}</span><strong>{{ report.difficulty }}</strong></div>
+  </div>
+
+  {% if report.skills %}
+  <h3>{{ S.skill_performance }}</h3>
+  <div class="skill-chart">
+    {% for s in report.skills %}
+    <div class="skill-row">
+      <div class="skill-name">{{ s.skill }}</div>
+      <div class="bar {{ s.color }}"><div style="width: {{ s.pct }}%"></div></div>
+      <div class="skill-pct">{{ s.correct }}/{{ s.total }} · {{ s.pct }}%</div>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  {% if report.mistakes %}
+  <h3>{{ S.mistakes }}</h3>
+  {% for r in report.mistakes %}
+  <div class="mistake"><p class="prompt">{{ r.title or r.prompt }}</p><p class="muted">{{ r.explain }}</p></div>
+  {% endfor %}
+  {% endif %}
+
+  {% if report.recommendations %}
+  <h3>{{ S.recommendations }}</h3>
+  <ul class="achievements">
+    {% for rec in report.recommendations %}<li><span class="dot"></span><div><small>{{ rec }}</small></div></li>{% endfor %}
+  </ul>
+  {% endif %}
+
+  <div class="actions"><a class="btn" href="/review">← {{ S.review_title }}</a></div>
+</div>
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block crumb %}{{ S.review_title }} — {{ m.title }}{% endblock %}
+{% block content %}
+<div class="card narrow">
+  <p class="muted">{{ S.review_hint }}</p>
+  <h3>{{ stage.title or (S.stage ~ ' ' ~ (idx + 1)) }}</h3>
+  <p class="prompt">{{ stage.prompt }}</p>
+  {% if stage.data %}<pre class="data">{{ stage.data }}</pre>{% endif %}
+
+  {% if result %}
+    <div class="verdict {{ 'ok' if result.ok else 'bad' }}">{{ S.correct if result.ok else S.not_quite }}</div>
+    {% if result.skill %}<div class="skill-tag">{{ S.skill }}: {{ result.skill }}</div>{% endif %}
+    <p>{{ result.explain }}</p>
+    {% if not result.ok %}
+      <div class="correct-answer"><strong>{{ S.correct_answer }}:</strong> {{ result.correct }}</div>
+    {% endif %}
+    <div class="actions">
+      <a class="btn primary" href="/review/practice/{{ m.id }}/{{ idx }}">{{ S.retry }}</a>
+      <a class="btn ghost" href="/review">← {{ S.review_title }}</a>
+    </div>
+  {% else %}
+    <form method="post" action="/review/practice/{{ m.id }}/{{ idx }}">
+      {% if stage.type in ['analyze', 'log_analysis', 'command_output', 'event_investigation', 'scenario'] %}
+        <div class="options">
+        {% for opt in stage.options %}
+          <label class="option"><input type="radio" name="answer" value="{{ loop.index0 }}" required> <span>{{ opt }}</span></label>
+        {% endfor %}
+        </div>
+      {% elif stage.type == 'true_false' %}
+        <div class="options">
+          <label class="option"><input type="radio" name="answer" value="true" required> <span>True</span></label>
+          <label class="option"><input type="radio" name="answer" value="false" required> <span>False</span></label>
+        </div>
+      {% elif stage.type in ['decision', 'incident_response', 'evidence_id'] %}
+        <p class="muted">{{ S.select_all }}</p>
+        <div class="options">
+        {% for opt in stage.options %}
+          <label class="option"><input type="checkbox" name="answer" value="{{ loop.index0 }}"> <span>{{ opt }}</span></label>
+        {% endfor %}
+        </div>
+      {% elif stage.type == 'terminal' %}
+        <input class="command" type="text" name="answer" placeholder="type the command..." autocomplete="off" required>
+      {% elif stage.type == 'report' %}
+        <label class="field">{{ S.severity }}
+          <select name="severity">{% for s in stage.severity_options %}<option value="{{ s }}">{{ s }}</option>{% endfor %}</select>
+        </label>
+        <label class="field">{{ S.remediation }}
+          <select name="remediation">{% for r in stage.remediation_options %}<option value="{{ loop.index0 }}">{{ r }}</option>{% endfor %}</select>
+        </label>
+      {% endif %}
+      <button class="btn primary" type="submit">{{ S.submit }}</button>
+    </form>
+  {% endif %}
+</div>
+{% endblock %}

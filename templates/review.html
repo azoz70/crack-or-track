@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block crumb %}{{ S.review_title }}{% endblock %}
+{% block content %}
+<p class="muted">{{ S.review_hint }}</p>
+
+<div class="grid two">
+  <div class="card">
+    <h2>{{ S.skill_performance }}</h2>
+    {% if skills %}
+    <div class="skill-chart">
+      {% for name, s in skills.items() %}
+      {% set pct = (s.correct * 100 / s.total) | round | int %}
+      <div class="skill-row">
+        <div class="skill-name">{{ name }}</div>
+        <div class="bar purple"><div style="width: {{ pct }}%"></div></div>
+        <div class="skill-pct">{{ s.correct }}/{{ s.total }} · {{ pct }}%</div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="muted">{{ S.no_activity }}</p>
+    {% endif %}
+  </div>
+
+  <div class="card">
+    <h2>{{ S.recent_activity }}</h2>
+    {% if reports %}
+    <ul class="achievements">
+      {% for r in reports %}
+      <li>
+        <span class="dot"></span>
+        <div>
+          <strong><a href="/report/{{ r.id }}">{{ r.mission_id }} — {{ r.score }}/100</a></strong>
+          <small>{{ r.created[:16].replace('T',' ') }}</small>
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p class="muted">{{ S.no_activity }}</p>
+    {% endif %}
+  </div>
+</div>
+
+<div class="card">
+  <h2>{{ S.mistakes }}</h2>
+  {% if incorrect %}
+  <ul class="achievements">
+    {% for q in incorrect %}
+    <li>
+      <span class="dot"></span>
+      <div>
+        <strong>{{ q.mission_title }}</strong>
+        <small>{{ q.title or q.prompt }}</small>
+        <a class="btn ghost" href="/review/practice/{{ q.mission_id }}/{{ q.stage_index }}">{{ S.start }}</a>
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="muted">{{ S.no_incorrect }}</p>
+  {% endif %}
+</div>
+{% endblock %}

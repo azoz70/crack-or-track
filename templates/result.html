@@ -2,25 +2,79 @@
 {% block crumb %}{{ m.title }} — result{% endblock %}
 {% block content %}
 <div class="card narrow">
-  <img class="result-logo" src="/static/logo.svg" alt="CRACK OR TRACK mascot">
-  <div class="verdict {{ 'ok' if result.score >= 70 else 'bad' }}">Mission complete</div>
+  <img class="result-logo" src="/static/logo.png" alt="CRACK OR TRACK mascot">
+  <div class="verdict {{ 'ok' if result.score >= 70 else 'bad' }}">{{ S.mission_complete }}</div>
   <h2 class="score-big">{{ result.score }}<span>/100</span></h2>
+
   <div class="grid stats small">
-    <div class="stat"><span class="label">XP earned</span><strong>+{{ result.xp }}</strong></div>
-    <div class="stat"><span class="label">Accuracy</span><strong>{{ result.accuracy }}%</strong></div>
-    <div class="stat"><span class="label">Wrong answers</span><strong>{{ state.wrong }}</strong></div>
-    <div class="stat"><span class="label">Hints used</span><strong>{{ state.hints }}</strong></div>
-    <div class="stat"><span class="label">Time</span><strong>{{ elapsed }}s</strong></div>
-    <div class="stat"><span class="label">Time bonus</span><strong>+{{ result.time_bonus }}</strong></div>
+    <div class="stat"><span class="label">{{ S.xp_earned }}</span><strong>+{{ report.xp }}</strong></div>
+    <div class="stat"><span class="label">{{ S.accuracy }}</span><strong>{{ report.accuracy }}%</strong></div>
+    <div class="stat"><span class="label">{{ S.correct_answers }}</span><strong>{{ report.correct }}/{{ report.total }}</strong></div>
+    <div class="stat"><span class="label">{{ S.incorrect_answers }}</span><strong>{{ report.incorrect }}</strong></div>
+    <div class="stat"><span class="label">{{ S.time }}</span><strong>{{ report.time }}s</strong></div>
+    <div class="stat"><span class="label">{{ S.difficulty }}</span><strong>{{ report.difficulty }}</strong></div>
+    <div class="stat"><span class="label">{{ S.time_bonus }}</span><strong>+{{ report.time_bonus }}</strong></div>
+    <div class="stat"><span class="label">{{ S.penalty }}</span><strong>−{{ report.penalty }}</strong></div>
   </div>
-  <h3>Debrief</h3>
+
+  {% if report.skills %}
+  <h3>{{ S.skill_performance }}</h3>
+  <div class="skill-chart">
+    {% for s in report.skills %}
+    <div class="skill-row">
+      <div class="skill-name">{{ s.skill }}</div>
+      <div class="bar {{ s.color }}"><div style="width: {{ s.pct }}%"></div></div>
+      <div class="skill-pct">{{ s.correct }}/{{ s.total }} · {{ s.pct }}%</div>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  {% if report.strongest %}
+  <h3>{{ S.strongest }}</h3>
+  <p>{% for s in report.strongest %}<span class="tag skill">{{ s.skill }} ({{ s.pct }}%)</span> {% endfor %}</p>
+  {% endif %}
+
+  {% if report.weakest %}
+  <h3>{{ S.weakest }}</h3>
+  <p>{% for s in report.weakest %}<span class="tag skill">{{ s.skill }} ({{ s.pct }}%)</span> {% endfor %}</p>
+  {% endif %}
+
+  {% if report.mistakes %}
+  <h3>{{ S.mistakes }}</h3>
+  {% for r in report.mistakes %}
+  <div class="mistake">
+    <p class="prompt">{{ r.title or r.prompt }}</p>
+    <p class="muted">{{ r.explain }}</p>
+  </div>
+  {% endfor %}
+  {% endif %}
+
+  {% if report.recommendations %}
+  <h3>{{ S.recommendations }}</h3>
+  <ul class="achievements">
+    {% for rec in report.recommendations %}<li><span class="dot"></span><div><small>{{ rec }}</small></div></li>{% endfor %}
+  </ul>
+  {% endif %}
+
+  <h3>{{ S.debrief }}</h3>
   <p>{{ m.explanation }}</p>
-  <h3>Real-world relevance</h3>
+  <h3>{{ S.real_world }}</h3>
   <p class="muted">{{ m.real_world }}</p>
+
+  {% if m.references %}
+  <h3>{{ S.references }}</h3>
+  <ul>{% for ref in m.references %}<li><a href="{{ ref.url }}" target="_blank" rel="noopener">{{ ref.title }}</a></li>{% endfor %}</ul>
+  {% endif %}
+
+  {% if report.next_mission %}
+  <p class="muted">{{ S.recommended_next }}: <a href="/mission/{{ report.next_mission.id }}">{{ report.next_mission.title }}</a></p>
+  {% endif %}
+
   <div class="actions">
-    <a class="btn primary" href="/mission/{{ m.id }}">Replay</a>
-    <a class="btn" href="/missions">More missions</a>
-    <a class="btn ghost" href="/">Dashboard</a>
+    <a class="btn primary" href="/mission/{{ m.id }}">{{ S.replay }}</a>
+    <a class="btn" href="/missions">{{ S.more_missions }}</a>
+    <a class="btn ghost" href="/">{{ S.dashboard }}</a>
   </div>
 </div>
 {% endblock %}

@@ -1,39 +1,45 @@
 <!doctype html>
-<html lang="en">
+<html lang="{{ S.lang_code }}" dir="{{ S.dir }}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% block title %}CRACK OR TRACK — by Abo Sara{% endblock %}</title>
-  <link rel="icon" href="/static/logo.svg" type="image/svg+xml">
+  <title>{% block title %}{{ S.brand }} — {{ S.by }}{% endblock %}</title>
+  <link rel="icon" href="/static/logo.png" type="image/png">
   <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
 <div class="app">
   <aside class="sidebar">
     <div class="brand">
-      <img class="brand-logo" src="/static/logo.svg" alt="CRACK OR TRACK camel mascot">
+      <img class="brand-logo" src="/static/logo.png" alt="CRACK OR TRACK camel mascot">
       <div class="brand-text">
-        <h1>CRACK OR TRACK</h1>
-        <small>BY ABO SARA</small>
-        <span class="tagline">Crack the System. Track the Threat.</span>
+        <h1>{{ S.brand }}</h1>
+        <small>{{ S.by }}</small>
+        <a class="linkedin-brand" href="https://www.linkedin.com/in/abdulaziz-alshehri/" target="_blank" rel="noopener" title="LinkedIn — Abdulaziz Alshehri">
+          <span class="li-badge">in</span>
+          <span class="li-name">Abdulaziz Alshehri</span>
+        </a>
+        <span class="tagline">{{ S.tagline }}</span>
       </div>
     </div>
     <nav>
-      <a href="/" class="{{ 'active' if active == 'dashboard' else '' }}">Dashboard</a>
-      <a href="/missions?track=red" class="{{ 'active' if active == 'red' else '' }}">CRACK · Red Team</a>
-      <a href="/missions?track=blue" class="{{ 'active' if active == 'blue' else '' }}">TRACK · SOC</a>
-      <a href="/missions" class="{{ 'active' if active == 'all' else '' }}">All missions</a>
+      <a href="/" class="{{ 'active' if active == 'dashboard' else '' }}">{{ S.nav_dashboard }}</a>
+      <a href="/missions?track=red" class="{{ 'active' if active == 'red' else '' }}">{{ S.nav_red }}</a>
+      <a href="/missions?track=blue" class="{{ 'active' if active == 'blue' else '' }}">{{ S.nav_blue }}</a>
+      <a href="/missions" class="{{ 'active' if active == 'all' else '' }}">{{ S.nav_all }}</a>
+      <a href="/review" class="{{ 'active' if active == 'review' else '' }}">{{ S.nav_review }}</a>
     </nav>
     <div class="player-mini">
-      <span class="label">Rank</span>
+      <span class="label">{{ S.rank }}</span>
       <strong>{{ rank }}</strong>
-      <span class="label">{{ player.xp }} XP</span>
+      <span class="label">{{ player.xp }} {{ S.xp }}</span>
     </div>
   </aside>
   <main>
     <header class="topbar">
-      <div class="crumb">{% block crumb %}Operations console{% endblock %}</div>
+      <div class="crumb">{% block crumb %}{{ S.operations_console }}{% endblock %}</div>
       <div class="badges">
+        <a class="lang-toggle" href="/lang/{{ 'ar' if lang == 'en' else 'en' }}">{{ S.language_label }}</a>
         <span class="badge red">CRACK</span>
         <span class="badge blue">TRACK</span>
       </div>

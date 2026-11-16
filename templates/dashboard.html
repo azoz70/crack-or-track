@@ -1,39 +1,63 @@
 {% extends "base.html" %}
-{% block crumb %}Dashboard{% endblock %}
+{% block crumb %}{{ S.nav_dashboard }}{% endblock %}
 {% block content %}
 <div class="hero card">
-  <img class="hero-logo" src="/static/logo.svg" alt="CRACK OR TRACK camel mascot">
+  <img class="hero-logo" src="/static/logo.png" alt="CRACK OR TRACK camel mascot">
   <div>
-    <h2 class="hero-title">CRACK OR TRACK</h2>
-    <p class="hero-sub">BY ABO SARA</p>
-    <p class="hero-tag">Crack the System. Track the Threat.</p>
+    <h2 class="hero-title">{{ S.brand }}</h2>
+    <p class="hero-sub">{{ S.by }}</p>
+    <p class="hero-tag">{{ S.tagline }}</p>
   </div>
 </div>
 
 <div class="grid stats">
   <div class="card stat">
-    <span class="label">Rank</span>
+    <span class="label">{{ S.rank }}</span>
     <strong>{{ rank }}</strong>
-    {% if next_rank %}<small>{{ next_threshold - player.xp }} XP to {{ next_rank }}</small>{% endif %}
+    {% if next_rank %}<small>{{ next_threshold - player.xp }} {{ S.xp }} · {{ next_rank }}</small>{% endif %}
   </div>
-  <div class="card stat">
-    <span class="label">Total XP</span>
-    <strong>{{ player.xp }}</strong>
+  <div class="card stat"><span class="label">{{ S.total_xp }}</span><strong>{{ player.xp }}</strong></div>
+  <div class="card stat"><span class="label">{{ S.missions_completed }}</span><strong>{{ completed }} / {{ missions|length }}</strong></div>
+  <div class="card stat"><span class="label">{{ S.average_score }}</span><strong>{{ average }}</strong></div>
+</div>
+
+<div class="card qbank">
+  <div class="qbank-head">
+    <h2>{{ S.question_bank }}</h2>
+    <div class="qbank-total"><strong>{{ qbank.total }}</strong> <span>{{ S.questions_unit }}</span></div>
   </div>
-  <div class="card stat">
-    <span class="label">Missions completed</span>
-    <strong>{{ completed }} / {{ missions|length }}</strong>
+  <div class="qbank-bars">
+    <div class="qbank-row">
+      <span class="qbank-label">{{ S.red_team }}</span>
+      <div class="bar red"><div style="width: {{ (qbank.red * 100 / qbank.total) | round | int }}%"></div></div>
+      <span class="qbank-count">{{ qbank.red }}</span>
+    </div>
+    <div class="qbank-row">
+      <span class="qbank-label">{{ S.soc_operations }}</span>
+      <div class="bar blue"><div style="width: {{ (qbank.blue * 100 / qbank.total) | round | int }}%"></div></div>
+      <span class="qbank-count">{{ qbank.blue }}</span>
+    </div>
+    <div class="qbank-row">
+      <span class="qbank-label">{{ S.red_vs_soc }}</span>
+      <div class="bar purple"><div style="width: {{ (qbank.purple * 100 / qbank.total) | round | int }}%"></div></div>
+      <span class="qbank-count">{{ qbank.purple }}</span>
+    </div>
   </div>
-  <div class="card stat">
-    <span class="label">Average score</span>
-    <strong>{{ average }}</strong>
+  <div class="qbank-missions">
+    {% for m in qbank.missions_list %}
+    <div class="qbank-mrow">
+      <span class="qbank-mtitle">{{ m.title }}</span>
+      <div class="bar {{ m.color }}"><div style="width: {{ m.count * 25 }}%"></div></div>
+      <span class="qbank-count">{{ m.count }}</span>
+    </div>
+    {% endfor %}
   </div>
 </div>
 
 <div class="grid two">
   <div class="card">
-    <h2>Track progress</h2>
-    {% for key, label, cls in [('red','Red Team','red'), ('blue','SOC Operations','blue')] %}
+    <h2>{{ S.track_progress }}</h2>
+    {% for key, label, cls in [('red', S.red_team, 'red'), ('blue', S.soc_operations, 'blue')] %}
       {% set s = stats[key] %}
       <div class="progress-row">
         <div class="progress-head"><span>{{ label }}</span><span>{{ s.done }}/{{ s.total }}</span></div>
@@ -41,26 +65,26 @@
       </div>
     {% endfor %}
     <div class="progress-row">
-      <div class="progress-head"><span>Red vs SOC</span><span>{{ stats['both'].done }}/{{ stats['both'].total }}</span></div>
+      <div class="progress-head"><span>{{ S.red_vs_soc }}</span><span>{{ stats['both'].done }}/{{ stats['both'].total }}</span></div>
       <div class="bar purple"><div style="width: {{ (stats['both'].done * 100 / stats['both'].total) if stats['both'].total else 0 }}%"></div></div>
     </div>
   </div>
 
   <div class="card">
-    <h2>Daily mission</h2>
-    <p class="muted">{{ daily.category }} · difficulty {{ daily.difficulty }}</p>
+    <h2>{{ S.daily_mission }}</h2>
+    <p class="muted">{{ daily.category }} · {{ S.difficulty }} {{ daily.difficulty }}</p>
     <h3>{{ daily.title }}</h3>
     <p>{{ daily.story }}</p>
-    <a class="btn primary" href="/mission/{{ daily.id }}">Start mission</a>
+    <a class="btn primary" href="/mission/{{ daily.id }}">{{ S.start_mission }}</a>
   </div>
 </div>
 
 <div class="grid two">
   <div class="card">
-    <h2>Recent activity</h2>
+    <h2>{{ S.recent_activity }}</h2>
     {% if activity %}
     <table>
-      <tr><th>Mission</th><th>Score</th><th>XP</th><th>When</th></tr>
+      <tr><th>{{ S.mission_col }}</th><th>{{ S.score_col }}</th><th>{{ S.xp }}</th><th>{{ S.when_col }}</th></tr>
       {% for a in activity %}
       <tr>
         <td>{{ a.mission_id }}</td>
@@ -71,12 +95,12 @@
       {% endfor %}
     </table>
     {% else %}
-      <p class="muted">No missions completed yet. Start with Red Team or SOC.</p>
+      <p class="muted">{{ S.no_activity }}</p>
     {% endif %}
   </div>
 
   <div class="card">
-    <h2>Achievements</h2>
+    <h2>{{ S.achievements }}</h2>
     <ul class="achievements">
       {% for name, desc, unlocked in achievements %}
       <li class="{{ 'unlocked' if unlocked else 'locked' }}">
