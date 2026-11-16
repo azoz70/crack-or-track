@@ -7,6 +7,8 @@ A cybersecurity training game with two tracks: **CRACK** (Red Team operations)
 and **TRACK** (SOC operations). Learn how attackers find weaknesses and how
 defenders detect and respond — in one product.
 
+**▶ Live demo:** [https://crack-or-track.onrender.com](https://crack-or-track.onrender.com)
+
 All scenarios use fictional hosts, logs, and credentials. Nothing in the game
 touches a real network.
 
