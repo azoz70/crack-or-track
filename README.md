@@ -12,7 +12,7 @@ defenders detect and respond — in one product.
 All scenarios use fictional hosts, logs, and credentials. Nothing in the game
 touches a real network.
 
-![CRACK OR TRACK camel mascot](static/logo.svg)
+![CRACK OR TRACK mascot](static/logo.png)
 
 ## Demo
 
@@ -126,7 +126,7 @@ render.yaml     Render blueprint
 
 ## Mascot
 
-A camel mascot (`static/logo.svg`) with gold-rimmed glasses gives the project its identity; the terminal banner is rendered from it as green ASCII art.
+A camel mascot (`static/logo.png`) — with gold-rimmed glasses and a Saudi shemagh — gives the project its identity; the terminal banner is rendered from it as green ASCII art.
 
 ## Tests
 
